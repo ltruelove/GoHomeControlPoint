@@ -70,4 +70,16 @@ const char register_control_point_html[] PROGMEM = R"rawliteral(<!DOCTYPE HTML>
     </form>
 
     </html>)rawliteral";
+
+  const char controlPoint_index_html[] PROGMEM = R"rawliteral(<!DOCTYPE HTML>
+    <html>
+        <head>
+            <title>GoHome Control Point Home</title>
+        </head>
+        <body>
+            <p>This is a GoHome Control Point running at IP: %IPPLACEHOLDER%</p>
+            <p>It is connected to the GoHome API running at IP: %APIHOSTIP%</p>
+            <p><a href='/clear'>Clear Preferences (CAREFUL! This will reset this device)</a></p>
+        </body>
+    </html>)rawliteral";
 #endif

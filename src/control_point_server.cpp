@@ -1,0 +1,45 @@
+#include "control_point_server.h"
+
+AsyncWebServer control_point_server(80);
+
+std::vector<NodeReading> readings;
+
+void controlPointHome(AsyncWebServerRequest *request) {
+    request->send(200, "text/html", controlPoint_index_html);
+}
+
+void getNodeData(AsyncWebServerRequest *request) {
+    int nodeId = 0;
+
+    if(!request->hasParam("nodeId")){
+      request->send(400, "text/html", "nodeId is required");
+      return;
+    }
+
+    nodeId = atoi(request->getParam("nodeId")->value().c_str());
+
+    String output;
+    for(NodeReading reading : readings){
+      if(reading.nodeId == nodeId){
+        output = reading.Serialize();
+      }
+    }
+
+    if(output.isEmpty()){
+      request->send(404, "text/html", "Could not find requested node data");
+    }
+
+    request->send(200, "application/json", output);
+}
+
+void launchControlPointWeb(){
+  control_point_server.on("/", HTTP_GET, controlPointHome);
+  control_point_server.on("/nodeData", HTTP_POST, getNodeData);
+  /*
+  control_point_server.on("/register", HTTP_GET, registerControlPoint);
+  control_point_server.on("/clear", HTTP_GET, clearPreferences);
+  control_point_server.on("/restart", HTTP_GET, restart);
+  control_point_server.onNotFound(handleNotFound);
+  control_point_server.begin();
+  */
+}

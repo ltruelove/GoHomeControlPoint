@@ -1,7 +1,6 @@
 #ifndef REGISTRATION_SERVER
 #define REGISTRATION_SERVER
 
-#include <Arduino.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 

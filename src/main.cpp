@@ -4,6 +4,7 @@
 #include "control_point_prefs.h"
 #include "registration_server.h"
 #include "initial_server.h"
+#include "control_point_server.h"
 
 AsyncWebServer server(80);
 
