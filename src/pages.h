@@ -2,7 +2,7 @@
 #define PAGE_TEXT
 
   const char wifi_index_html[] PROGMEM = R"rawliteral(<!DOCTYPE HTML>
-  <html>GoHome Node WiFi Selection
+  <html><h3>GoHome Control Point WiFi Selection</h3>
   <p><a href='/wifi-setup'>Go To WiFi Form</a></p>
   <p><a href='/clear'>Clear Preferences (CAREFUL!)</a></p>
   </html>)rawliteral";
@@ -43,7 +43,7 @@
   )rawliteral";
 
   const char register_index_html[] PROGMEM = R"rawliteral(<!DOCTYPE HTML>
-  <html>GoHome Node Registration
+  <html>GoHome Control Point Registration
     <p><a href='/register'>Go To Registration Form</a></p>
     <p><a href='/clear'>Clear Preferences (CAREFUL!)</a></p>
     </html>)rawliteral";

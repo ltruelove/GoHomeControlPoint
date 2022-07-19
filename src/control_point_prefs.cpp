@@ -10,7 +10,6 @@ uint16_t apiPort = 8080;
 String name = "";
 int controlPointId = 0;
 
-
 void initPrefs(){
     prefs.begin(prefsName, true);
     ssid = prefs.getString("ssid", "");

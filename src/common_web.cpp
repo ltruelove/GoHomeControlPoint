@@ -44,7 +44,7 @@ String processor(const String& var){
 }
 
 String scanNetworks(){
-    String options = "";
+  String options = "";
   int n = WiFi.scanNetworks();
   Serial.println("scan done");
   if (n == 0){
