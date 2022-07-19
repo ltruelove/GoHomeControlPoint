@@ -1,16 +1,16 @@
 #include "node_reading.h"
 
-String NodeReading::Serialize(){
+String SerializeNodeReading(NodeReading reading){
 
     DynamicJsonDocument doc(1024);
 
-    doc["nodeId"] = nodeId;
-    doc["TemperatureF"] = TemperatureF;
-    doc["TemperatureC"] = TemperatureC;
-    doc["Humidity"] = Humidity;
-    doc["Moisture"] = Moisture;
-    doc["ResistorValue"] = ResistorValue;
-    doc["IsClosed"] = IsClosed;
+    doc["nodeId"] = reading.nodeId;
+    doc["TemperatureF"] = reading.TemperatureF;
+    doc["TemperatureC"] = reading.TemperatureC;
+    doc["Humidity"] = reading.Humidity;
+    doc["Moisture"] = reading.Moisture;
+    doc["ResistorValue"] = reading.ResistorValue;
+    doc["IsClosed"] = reading.IsClosed;
 
     String output;
     serializeJson(doc, output);

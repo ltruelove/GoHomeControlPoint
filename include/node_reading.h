@@ -3,9 +3,7 @@
 
 #include <ArduinoJson.h>
 
-class NodeReading{
-public:
-    String Serialize();
+typedef struct NodeReading {
     int nodeId;
     float TemperatureF;
     float TemperatureC;
@@ -14,5 +12,7 @@ public:
     int ResistorValue;
     bool IsClosed;
 };
+
+String SerializeNodeReading(NodeReading reading);
 
 #endif

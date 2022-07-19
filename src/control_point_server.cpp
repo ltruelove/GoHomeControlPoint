@@ -21,7 +21,7 @@ void getNodeData(AsyncWebServerRequest *request) {
     String output;
     for(NodeReading reading : readings){
       if(reading.nodeId == nodeId){
-        output = reading.Serialize();
+        output = SerializeNodeReading(reading);
       }
     }
 
@@ -42,4 +42,24 @@ void launchControlPointWeb(){
   control_point_server.onNotFound(handleNotFound);
   control_point_server.begin();
   */
+}
+
+void addReading(NodeReading reading){
+    int i = 0;
+    int existingIndex = -1;
+
+    for(NodeReading r : readings){
+      if(r.nodeId == reading.nodeId){
+        existingIndex = i;
+      }
+
+      i++;
+    }
+
+  if(existingIndex > -1){
+    readings[existingIndex] = reading;
+  }else{
+    readings.push_back(reading);
+  }
+
 }

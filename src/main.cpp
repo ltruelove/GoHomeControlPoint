@@ -5,6 +5,7 @@
 #include "registration_server.h"
 #include "initial_server.h"
 #include "control_point_server.h"
+#include "esp_now_handler.h"
 
 AsyncWebServer server(80);
 
@@ -52,7 +53,17 @@ void setup() {
 
     if(WiFi.status() == WL_CONNECTED){
       Serial.println("Connected to WiFi");
-      launchRegisterWeb();
+      int cpId =  getControlPointId();
+
+      if(cpId > 0){
+        //TODO handle ESP Now requests as well.
+        if(!InitEspNow()){
+          return;
+        }
+        launchControlPointWeb();
+      }else{
+        launchRegisterWeb();
+      }
     }else{
       Serial.println("Could not connect to WiFi. Starting over.");
       setupAccessPoint();

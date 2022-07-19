@@ -1,6 +1,7 @@
 #ifndef CONTROL_POINT_SERVER
 #define CONTROL_POINT_SERVER
 
+#include <Arduino.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
@@ -10,5 +11,6 @@
 #include "node_reading.h"
 
 void launchControlPointWeb();
+void addReading(NodeReading reading);
 
 #endif
