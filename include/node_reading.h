@@ -3,7 +3,7 @@
 
 #include <ArduinoJson.h>
 
-typedef struct NodeReading {
+struct NodeReading {
     int nodeId;
     float TemperatureF;
     float TemperatureC;
