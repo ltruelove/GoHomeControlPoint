@@ -1,11 +1,12 @@
 #include "control_point_server.h"
 
 AsyncWebServer control_point_server(80);
+//AsyncEventSource events("/events");
 
 std::vector<NodeReading> readings;
 
 void controlPointHome(AsyncWebServerRequest *request) {
-    request->send(200, "text/html", controlPoint_index_html);
+    request->send_P(200, "text/html", controlPoint_index_html, processor);
 }
 
 void getNodeData(AsyncWebServerRequest *request) {
@@ -33,14 +34,16 @@ void getNodeData(AsyncWebServerRequest *request) {
 }
 
 void launchControlPointWeb(){
+  Serial.println("control point web");
   control_point_server.on("/", HTTP_GET, controlPointHome);
   control_point_server.on("/nodeData", HTTP_POST, getNodeData);
-  /*
-  control_point_server.on("/register", HTTP_GET, registerControlPoint);
   control_point_server.on("/clear", HTTP_GET, clearPreferences);
-  control_point_server.on("/restart", HTTP_GET, restart);
   control_point_server.onNotFound(handleNotFound);
+  
   control_point_server.begin();
+  /*
+  control_point_server.on("/restart", HTTP_GET, restart);
+  control_point_server.on("/register", HTTP_GET, registerControlPoint);
   */
 }
 

@@ -16,7 +16,7 @@ bool hasPreferences = false;
 String macAddress;
 
 void connectToWifi(const char *ssid, const char *key){
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_AP_STA);
   Serial.println("connecting");
   WiFi.begin(ssid, key);
   int c = 0;
@@ -54,12 +54,15 @@ void setup() {
     if(WiFi.status() == WL_CONNECTED){
       Serial.println("Connected to WiFi");
       int cpId =  getControlPointId();
+      Serial.println(cpId);
 
       if(cpId > 0){
         //TODO handle ESP Now requests as well.
+        Serial.println("Initializing ESP Now");
         if(!InitEspNow()){
           return;
         }
+        Serial.println("Launching Control Point Web");
         launchControlPointWeb();
       }else{
         launchRegisterWeb();

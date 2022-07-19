@@ -3,7 +3,7 @@
 String processor(const String& var){
 
   if(var == "IPPLACEHOLDER"){
-    IPAddress ip = WiFi.softAPIP();
+    IPAddress ip = WiFi.localIP();
     return ip.toString();
   }
 

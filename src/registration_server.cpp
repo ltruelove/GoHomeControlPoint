@@ -13,9 +13,12 @@ void registerControlPoint(AsyncWebServerRequest *request) {
 void setRegisteredId(AsyncWebServerRequest *request){
     int controlPointId = 0;
 
-    if(request->hasParam("controlPointId")){
-        controlPointId = atoi(request->getParam("controlPointId")->value().c_str());
+    if(!request->hasParam("controlPointId", true)){
+        request->send(400, "text/html", "controlPointId is required");
+        return;
     }
+
+    controlPointId = atoi(request->getParam("controlPointId", true)->value().c_str());
 
     setControlPointId(controlPointId);
     request->send(200, "text/html", "Control point ID set");
