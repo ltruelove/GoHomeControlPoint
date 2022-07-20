@@ -17,6 +17,8 @@ String macAddress;
 
 void connectToWifi(const char *ssid, const char *key){
   WiFi.mode(WIFI_AP_STA);
+  WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+  WiFi.setHostname(getName().c_str());
   Serial.println("connecting");
   WiFi.begin(ssid, key);
   int c = 0;
@@ -50,6 +52,7 @@ void setup() {
     setupAccessPoint();
   }else{
     connectToWifi(getSSID().c_str(), getNetworkKey().c_str());
+    hasPreferences = true;
 
     if(WiFi.status() == WL_CONNECTED){
       Serial.println("Connected to WiFi");
@@ -75,5 +78,25 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+if(!hasPreferences){
+    delay(1);
+  }else{
+    delay(100);
+
+    // increment our time counter
+    unsigned long currentMillis = millis();
+    // if WiFi is down, try reconnecting
+    if ((WiFi.status() != WL_CONNECTED) && (currentMillis - previousMillis >=interval)) {
+      Serial.println(millis());
+      Serial.println("Reconnecting to WiFi...");
+      WiFi.disconnect();
+      if(WiFi.reconnect()){
+        if(getControlPointId() > 0){
+          Serial.println("Updating API with new IP");
+          updateAPIWithIpAddress();
+        }
+      }
+      previousMillis = currentMillis;
+    }
+  }
 }

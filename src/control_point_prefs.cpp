@@ -40,14 +40,19 @@ void setPrefs(String _ssid, String _pass, String _apiHost, int _apiPort, String 
     Serial.println(_name);
     Serial.println(_controlPointId);
 
+    savePrefs();
+}
+
+void savePrefs(){
     prefs.begin(prefsName, false);
-    prefs.putString("ssid", _ssid);
-    prefs.putString("pass", _pass);
-    prefs.putString("apiHost", _apiHost);
-    prefs.putUInt("apiPort", _apiPort);
-    prefs.putString("name", _name);
-    prefs.putUInt("controlPointId", _controlPointId);
+    prefs.putString("ssid", ssid);
+    prefs.putString("pass", pass);
+    prefs.putString("apiHost", apiHost);
+    prefs.putUInt("apiPort", apiPort);
+    prefs.putString("name", name);
+    prefs.putUInt("controlPointId", controlPointId);
     prefs.end();
+
 }
 
 void clearPrefs(){
@@ -72,6 +77,13 @@ String getNetworkKey(){
 
 String getApiHost(){
     return apiHost;
+}
+
+void setApiHost(String ipAddress){
+    apiHost = ipAddress;
+    prefs.begin(prefsName, false);
+    prefs.putString("apiHost", apiHost);
+    prefs.end();
 }
 
 int getApiPort(){
