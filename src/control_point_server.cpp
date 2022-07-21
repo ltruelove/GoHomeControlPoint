@@ -92,7 +92,7 @@ void launchControlPointWeb(){
   Serial.println("control point web");
   control_point_server.on("/", HTTP_GET, controlPointHome);
   control_point_server.on("/updateIp", HTTP_GET, controlPointUpdateIp);
-  control_point_server.on("/nodeData", HTTP_POST, getNodeData);
+  control_point_server.on("/nodeData", HTTP_GET, getNodeData);
   control_point_server.on("/apiIpUpdate", HTTP_POST, apiIpUpdate);
   control_point_server.on("/clear", HTTP_GET, clearPreferences);
   control_point_server.onNotFound(handleNotFound);

@@ -41,12 +41,10 @@ void setup() {
   
   WiFi.disconnect();
 
-  Serial.println("getting preferences");
   initPrefs();
 
   macAddress = WiFi.macAddress();
 
-  Serial.println("Check for empty SSID");
   if(isSSIDEmpty()){
     Serial.println("empty ssid");
     setupAccessPoint();
