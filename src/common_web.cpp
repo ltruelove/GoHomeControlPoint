@@ -18,7 +18,7 @@ String processor(const String& var){
   if(var == "APIHOST"){
     String host = "http://";
     host += getApiHost();
-    int port = getApiPort();
+    uint16_t port = getApiPort();
 
     if(port > 0 && port != 80){
       host += ":";

@@ -40,6 +40,13 @@ void setPrefs(String _ssid, String _pass, String _apiHost, int _apiPort, String 
     Serial.println(_name);
     Serial.println(_controlPointId);
 
+    ssid = _ssid;
+    pass = _pass;
+    apiHost = _apiHost;
+    apiPort = _apiPort;
+    name = _name;
+    controlPointId = _controlPointId;
+
     savePrefs();
 }
 

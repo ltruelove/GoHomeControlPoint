@@ -58,7 +58,6 @@ void setup() {
       Serial.println(cpId);
 
       if(cpId > 0){
-        //TODO handle ESP Now requests as well.
         Serial.println("Initializing ESP Now");
         if(!InitEspNow()){
           return;

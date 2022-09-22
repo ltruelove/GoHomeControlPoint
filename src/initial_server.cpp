@@ -12,7 +12,7 @@ void wifiSetupPage(AsyncWebServerRequest *request){
 
 void setParameters(AsyncWebServerRequest *request){
     String ssid, pass, apiHost, name;
-    int apiPort = 80;
+    uint16_t apiPort = 80;
 
     if(request->hasParam("ssid")){
         ssid = request->getParam("ssid")->value();
@@ -27,7 +27,7 @@ void setParameters(AsyncWebServerRequest *request){
     }
 
     if(request->hasParam("apiPort")){
-        apiPort = atoi(request->getParam("apiPort")->value().c_str());
+        apiPort = (uint16_t)atoi(request->getParam("apiPort")->value().c_str());
     }
 
     if(request->hasParam("name")){
