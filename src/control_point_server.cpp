@@ -1,4 +1,5 @@
 #include "control_point_server.h"
+#include "esp_now_handler.h"
 
 AsyncWebServer control_point_server(80);
 //AsyncEventSource events("/events");
@@ -88,6 +89,20 @@ void apiIpUpdate(AsyncWebServerRequest *request) {
   ESP.restart();
 }
 
+void toggleNodeSwitch(AsyncWebServerRequest *request) {
+    String mac = "";
+
+    if(!request->hasParam("mac")){
+      request->send(400, "text/html", "nodeId is required");
+      return;
+    }
+
+    mac = request->getParam("mac")->value().c_str();
+    BroadcastData(true, false, 0, mac);
+
+    request->send(200, "application/json", "");
+}
+
 void launchControlPointWeb(){
   Serial.println("control point web");
   control_point_server.on("/", HTTP_GET, controlPointHome);
@@ -95,6 +110,7 @@ void launchControlPointWeb(){
   control_point_server.on("/nodeData", HTTP_GET, getNodeData);
   control_point_server.on("/apiIpUpdate", HTTP_POST, apiIpUpdate);
   control_point_server.on("/clear", HTTP_GET, clearPreferences);
+  control_point_server.on("/toggleNodeSwitch", HTTP_GET, toggleNodeSwitch);
   control_point_server.onNotFound(handleNotFound);
   
   control_point_server.begin();
