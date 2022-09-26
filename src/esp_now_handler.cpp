@@ -8,6 +8,7 @@ struct SwitchCommand {
     bool triggerToggle;
     bool pressMomentary;
     int msMomentaryPress;
+    bool triggerUpdate;
 };
 
 SwitchCommand command;
@@ -75,10 +76,11 @@ uint8_t * stringToMac(String macString){
     return macArray;
 }
 
-void BroadcastData(bool triggerToggle, bool pressMomentary, int msMomentaryPress, String broadcastMac){
+void BroadcastData(bool triggerToggle, bool pressMomentary, int msMomentaryPress, bool triggerUpdate, String broadcastMac){
     command.triggerToggle = triggerToggle;
     command.pressMomentary = pressMomentary;
     command.msMomentaryPress = msMomentaryPress;
+    command.triggerUpdate = triggerUpdate;
     uint8_t* mac = stringToMac(broadcastMac);
 
     if(!esp_now_is_peer_exist(mac)){

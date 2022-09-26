@@ -93,12 +93,48 @@ void toggleNodeSwitch(AsyncWebServerRequest *request) {
     String mac = "";
 
     if(!request->hasParam("mac")){
-      request->send(400, "text/html", "nodeId is required");
+      request->send(400, "text/html", "node MAC address is required");
       return;
     }
 
     mac = request->getParam("mac")->value().c_str();
-    BroadcastData(true, false, 0, mac);
+    BroadcastData(true, false, 0, false, mac);
+
+    request->send(200, "application/json", "");
+}
+
+void pressMomentary(AsyncWebServerRequest *request) {
+    String mac = "";
+    int duration = 0;
+
+    if(!request->hasParam("mac")){
+      request->send(400, "text/html", "node MAC address is required");
+      return;
+    }
+
+    if(!request->hasParam("MomentaryPressDuration")){
+      request->send(400, "text/html", "MomentaryPressDuration is required");
+      return;
+    }
+
+    mac = request->getParam("mac")->value().c_str();
+    duration = atoi(request->getParam("mac")->value().c_str());
+
+    BroadcastData(false, true, duration, false, mac);
+
+    request->send(200, "application/json", "");
+}
+
+void triggerUpdate(AsyncWebServerRequest *request) {
+    String mac = "";
+
+    if(!request->hasParam("mac")){
+      request->send(400, "text/html", "node MAC address is required");
+      return;
+    }
+
+    mac = request->getParam("mac")->value().c_str();
+    BroadcastData(false, false, 0, true, mac);
 
     request->send(200, "application/json", "");
 }
@@ -111,6 +147,8 @@ void launchControlPointWeb(){
   control_point_server.on("/apiIpUpdate", HTTP_POST, apiIpUpdate);
   control_point_server.on("/clear", HTTP_GET, clearPreferences);
   control_point_server.on("/toggleNodeSwitch", HTTP_GET, toggleNodeSwitch);
+  control_point_server.on("/pressMomentary", HTTP_GET, pressMomentary);
+  control_point_server.on("/triggerUpdate", HTTP_GET, triggerUpdate);
   control_point_server.onNotFound(handleNotFound);
   
   control_point_server.begin();
