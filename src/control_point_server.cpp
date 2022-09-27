@@ -35,7 +35,9 @@ void getNodeData(AsyncWebServerRequest *request) {
       request->send(404, "text/html", "Could not find requested node data");
     }
 
-    request->send(200, "application/json", output);
+    AsyncWebServerResponse *response = request->beginResponse(200, "application/json", output);
+    response->addHeader("Access-Control-Allow-Origin", "*");
+    request->send(response);
 }
 
 void updateAPIWithIpAddress(){
