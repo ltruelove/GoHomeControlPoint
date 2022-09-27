@@ -93,6 +93,13 @@ void setApiHost(String ipAddress){
     prefs.end();
 }
 
+void setApiPort(int port){
+    apiPort = port;
+    prefs.begin(prefsName, false);
+    prefs.putUInt("apiPort", apiPort);
+    prefs.end();
+}
+
 int getApiPort(){
     return apiPort;
 }

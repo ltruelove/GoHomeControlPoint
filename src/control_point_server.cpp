@@ -81,64 +81,79 @@ void apiIpUpdate(AsyncWebServerRequest *request) {
   }
 
   String ipAddress = request->getParam("IpAddress", true)->value();
+  int port;
+
+  if(!request->hasParam("Port", true)){
+    port = atoi(request->getParam("Port", true)->value().c_str());
+  }
 
   Serial.println(ipAddress);
 
   setApiHost(ipAddress);
-  request->send(200, "text/html", "IP Address saved");
+  setApiPort(port);
+  
+  AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "IP address saved");
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
 
   delay(100);
   ESP.restart();
 }
 
 void toggleNodeSwitch(AsyncWebServerRequest *request) {
-    String mac = "";
+  String mac = "";
 
-    if(!request->hasParam("mac")){
-      request->send(400, "text/html", "node MAC address is required");
-      return;
-    }
+  if(!request->hasParam("mac")){
+    request->send(400, "text/html", "node MAC address is required");
+    return;
+  }
 
-    mac = request->getParam("mac")->value().c_str();
-    BroadcastData(true, false, 0, false, mac);
+  mac = request->getParam("mac")->value().c_str();
+  BroadcastData(true, false, 0, false, mac);
 
-    request->send(200, "application/json", "");
+  AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
 }
 
 void pressMomentary(AsyncWebServerRequest *request) {
-    String mac = "";
-    int duration = 0;
+  String mac = "";
+  int duration = 0;
 
-    if(!request->hasParam("mac")){
-      request->send(400, "text/html", "node MAC address is required");
-      return;
-    }
+  if(!request->hasParam("mac")){
+    request->send(400, "text/html", "node MAC address is required");
+    return;
+  }
 
-    if(!request->hasParam("MomentaryPressDuration")){
-      request->send(400, "text/html", "MomentaryPressDuration is required");
-      return;
-    }
+  if(!request->hasParam("MomentaryPressDuration")){
+    request->send(400, "text/html", "MomentaryPressDuration is required");
+    return;
+  }
 
-    mac = request->getParam("mac")->value().c_str();
-    duration = atoi(request->getParam("mac")->value().c_str());
+  mac = request->getParam("mac")->value().c_str();
+  duration = atoi(request->getParam("mac")->value().c_str());
 
-    BroadcastData(false, true, duration, false, mac);
+  BroadcastData(false, true, duration, false, mac);
 
-    request->send(200, "application/json", "");
+  AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
 }
 
 void triggerUpdate(AsyncWebServerRequest *request) {
-    String mac = "";
+  String mac = "";
 
-    if(!request->hasParam("mac")){
-      request->send(400, "text/html", "node MAC address is required");
-      return;
-    }
+  if(!request->hasParam("mac")){
+    request->send(400, "text/html", "node MAC address is required");
+    return;
+  }
 
-    mac = request->getParam("mac")->value().c_str();
-    BroadcastData(false, false, 0, true, mac);
+  mac = request->getParam("mac")->value().c_str();
+  BroadcastData(false, false, 0, true, mac);
 
-    request->send(200, "application/json", "");
+  AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
 }
 
 void launchControlPointWeb(){

@@ -13,6 +13,7 @@ String getSSID();
 String getNetworkKey();
 String getApiHost();
 void setApiHost(String ipAddress);
+void setApiPort(int port);
 int getApiPort();
 String getName();
 int getControlPointId();

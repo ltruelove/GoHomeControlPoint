@@ -94,6 +94,10 @@ const char register_control_point_html[] PROGMEM = R"rawliteral(<!DOCTYPE HTML>
             <td><input type='text' name='IpAddress'></td>
         </tr>
         <tr>
+            <td><label>New Port: </label></td>
+            <td><input type='number' name='Port'></td>
+        </tr>
+        <tr>
             <td>&nbsp;</td>
             <td><input type='submit'></td>
         </tr>
