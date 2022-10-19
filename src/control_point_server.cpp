@@ -131,7 +131,7 @@ void pressMomentary(AsyncWebServerRequest *request) {
   }
 
   mac = request->getParam("mac")->value().c_str();
-  duration = atoi(request->getParam("mac")->value().c_str());
+  duration = atoi(request->getParam("MomentaryPressDuration")->value().c_str());
 
   BroadcastData(false, true, duration, false, mac);
 
