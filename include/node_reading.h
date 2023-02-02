@@ -10,6 +10,7 @@ struct NodeReading {
     float Humidity;
     int Moisture;
     int ResistorValue;
+    int MagneticValue;
     bool IsClosed;
 };
 

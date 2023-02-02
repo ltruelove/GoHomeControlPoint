@@ -10,6 +10,7 @@ String SerializeNodeReading(NodeReading reading){
     doc["Humidity"] = reading.Humidity;
     doc["Moisture"] = reading.Moisture;
     doc["ResistorValue"] = reading.ResistorValue;
+    doc["MagneticValue"] = reading.MagneticValue;
     doc["IsClosed"] = reading.IsClosed;
 
     String output;
