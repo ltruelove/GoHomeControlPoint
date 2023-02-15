@@ -6,6 +6,6 @@
 #include "control_point_server.h"
 
 bool InitEspNow();
-void BroadcastData(bool triggerToggle, bool pressMomentary, int msMomentaryPress, bool triggerUpdate, String broadcastMac);
+void BroadcastData(bool triggerToggle, bool pressMomentary, int msMomentaryPress, bool triggerUpdate, bool eraseSettings, String broadcastMac);
 
 #endif

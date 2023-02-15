@@ -109,7 +109,7 @@ void toggleNodeSwitch(AsyncWebServerRequest *request) {
   }
 
   mac = request->getParam("mac")->value().c_str();
-  BroadcastData(true, false, 0, false, mac);
+  BroadcastData(true, false, 0, false, false, mac);
 
   AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
   response->addHeader("Access-Control-Allow-Origin", "*");
@@ -133,7 +133,7 @@ void pressMomentary(AsyncWebServerRequest *request) {
   mac = request->getParam("mac")->value().c_str();
   duration = atoi(request->getParam("MomentaryPressDuration")->value().c_str());
 
-  BroadcastData(false, true, duration, false, mac);
+  BroadcastData(false, true, duration, false, false, mac);
 
   AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
   response->addHeader("Access-Control-Allow-Origin", "*");
@@ -149,7 +149,23 @@ void triggerUpdate(AsyncWebServerRequest *request) {
   }
 
   mac = request->getParam("mac")->value().c_str();
-  BroadcastData(false, false, 0, true, mac);
+  BroadcastData(false, false, 0, true, false, mac);
+
+  AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
+}
+
+void eraseNodeSettings(AsyncWebServerRequest *request) {
+  String mac = "";
+
+  if(!request->hasParam("mac")){
+    request->send(400, "text/html", "node MAC address is required");
+    return;
+  }
+
+  mac = request->getParam("mac")->value().c_str();
+  BroadcastData(false, false, 0, false, true, mac);
 
   AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
   response->addHeader("Access-Control-Allow-Origin", "*");
@@ -166,6 +182,7 @@ void launchControlPointWeb(){
   control_point_server.on("/toggleNodeSwitch", HTTP_GET, toggleNodeSwitch);
   control_point_server.on("/pressMomentary", HTTP_GET, pressMomentary);
   control_point_server.on("/triggerUpdate", HTTP_GET, triggerUpdate);
+  control_point_server.on("/eraseNodeSettings", HTTP_GET, eraseNodeSettings);
   control_point_server.onNotFound(handleNotFound);
   
   control_point_server.begin();
