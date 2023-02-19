@@ -28,6 +28,8 @@ void OnDataRecv(const uint8_t * mac_addr, const uint8_t *incomingData, int len) 
     // store the reading for fetching later
     addReading(nowReading);
     
+    // Can't call the logging endpoint in the middle of an ESP Now operation for some reason.
+    // So I moved it to the main loop and check this nodeIdToLog value to see if I need to log it.
     nodeIdToLog = nowReading.nodeId;
 }
 
