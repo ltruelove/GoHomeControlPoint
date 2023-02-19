@@ -1,113 +1,55 @@
 #include "control_point_prefs.h"
 
-Preferences prefs;
-
-const char *prefsName = "cpPrefs";
-String ssid = "";
-String pass = "";
-String apiHost = "";
-uint16_t apiPort = 8080;
-String name = "";
-int controlPointId = 0;
-
-void initPrefs(){
-    prefs.begin(prefsName, true);
-    ssid = prefs.getString("ssid", "");
-    pass = prefs.getString("pass", "");
-    apiHost = prefs.getString("apiHost", "");
-    apiPort = prefs.getUInt("apiPort", 80);
-    controlPointId = prefs.getUInt("controlPointId", 0);
-    name = prefs.getString("name");
-    prefs.end();
-
-    Serial.println(ssid);
-    Serial.println(pass);
-    Serial.println(apiHost);
-    Serial.println(apiPort);
-    Serial.println(name);
-    Serial.println(controlPointId);
-}
-
-bool isSSIDEmpty(){
-    return ssid.isEmpty();
-}
-
-void setPrefs(String _ssid, String _pass, String _apiHost, int _apiPort, String _name, int _controlPointId){
-    Serial.println(_ssid);
-    Serial.println(_pass);
-    Serial.println(_apiHost);
-    Serial.println(_apiPort);
-    Serial.println(_name);
-    Serial.println(_controlPointId);
-
-    ssid = _ssid;
-    pass = _pass;
-    apiHost = _apiHost;
-    apiPort = _apiPort;
-    name = _name;
-    controlPointId = _controlPointId;
-
-    savePrefs();
-}
-
-void savePrefs(){
-    prefs.begin(prefsName, false);
-    prefs.putString("ssid", ssid);
-    prefs.putString("pass", pass);
-    prefs.putString("apiHost", apiHost);
-    prefs.putUInt("apiPort", apiPort);
-    prefs.putString("name", name);
-    prefs.putUInt("controlPointId", controlPointId);
-    prefs.end();
-
-}
+const char *SSID = "ssid", *PASS = "pass", *API_HOST = "apiHost", *NODE_NAME = "name", *CTRL_PT_ID = "controlPointId", *API_PORT = "apiPort";
 
 void clearPrefs(){
-    prefs.begin(prefsName, false);
-    prefs.clear();
-    prefs.end();
-}
-
-void setControlPointId(int _controlPointId){
-    prefs.begin(prefsName, false);
-    prefs.putUInt("controlPointId", _controlPointId);
-    prefs.end();
+    eraseSettings();
 }
 
 String getSSID(){
-    return ssid;
+    return getStringValue(SSID);
 }
 
 String getNetworkKey(){
-    return pass;
+    return getStringValue(PASS);
 }
 
 String getApiHost(){
-    return apiHost;
-}
-
-void setApiHost(String ipAddress){
-    apiHost = ipAddress;
-    prefs.begin(prefsName, false);
-    prefs.putString("apiHost", apiHost);
-    prefs.end();
-}
-
-void setApiPort(int port){
-    apiPort = port;
-    prefs.begin(prefsName, false);
-    prefs.putUInt("apiPort", apiPort);
-    prefs.end();
-}
-
-int getApiPort(){
-    return apiPort;
+    return getStringValue(API_HOST);
 }
 
 String getName(){
-    return name;
+    return getStringValue(NODE_NAME);
 }
 
 int getControlPointId(){
-    return controlPointId;
+    return getIntValue(CTRL_PT_ID);
+}
+
+int getApiPort(){
+    return getIntValue(API_PORT);
+}
+
+void setApiPort(int port){
+    setIntValue(port, API_PORT);
+}
+
+void setSSID(String _ssid){
+    setStringValue(_ssid.c_str(), SSID);
+}
+
+void setPass(String _pass){
+    setStringValue(_pass.c_str(), PASS);
+}
+
+void setApiHost(String _apiHost){
+    setStringValue(_apiHost.c_str(), API_HOST);
+}
+
+void setName(String _name){
+    setStringValue(_name.c_str(), NODE_NAME);
+}
+
+void setControlPointId(int _controlPointId){
+    setIntValue(_controlPointId, CTRL_PT_ID);
 }

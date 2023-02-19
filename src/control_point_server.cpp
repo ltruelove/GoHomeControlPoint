@@ -1,5 +1,6 @@
 #include "control_point_server.h"
 #include "esp_now_handler.h"
+#include "api_wrapper.h"
 
 AsyncWebServer control_point_server(80);
 //AsyncEventSource events("/events");
@@ -12,6 +13,10 @@ void controlPointHome(AsyncWebServerRequest *request) {
 
 void controlPointUpdateIp(AsyncWebServerRequest *request) {
     request->send(200, "text/html", api_ip_change_form);
+}
+
+std::vector<NodeReading> GetNodeReadings(){
+  return readings;
 }
 
 void getNodeData(AsyncWebServerRequest *request) {
@@ -40,43 +45,9 @@ void getNodeData(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
-void updateAPIWithIpAddress(){
-  WiFiClient client;
-  HTTPClient http;
-
-  String updateEndpoint = "http://" + getApiHost();
-  int port = getApiPort();
-  if(port != 80){
-    updateEndpoint += ":" + (String)port;
-  }
-  updateEndpoint += "/controlPoint/ipUpdate";
-
-  Serial.println(updateEndpoint);
-  Serial.println(WiFi.localIP());
-  http.begin(client, updateEndpoint);
-
-  DynamicJsonDocument doc(1024);
-
-  doc["Id"] = getControlPointId();
-  doc["IpAddress"] = WiFi.localIP().toString();
-
-  String serializedString;
-  serializeJson(doc, serializedString);
-
-  Serial.println("Payload:");
-  Serial.println(serializedString);
-  int httpResponseCode = http.POST(serializedString);
-
-  if(httpResponseCode != 200){
-    http.end();
-    Serial.print("Register request failed with response code: ");
-    Serial.println(httpResponseCode);
-  }
-}
-
 void apiIpUpdate(AsyncWebServerRequest *request) {
   if(!request->hasParam("IpAddress", true)){
-    request->send(400, "text/html", "nodeId is required");
+    request->send(400, "text/html", "IP address is required");
     return;
   }
 
@@ -149,6 +120,7 @@ void triggerUpdate(AsyncWebServerRequest *request) {
   }
 
   mac = request->getParam("mac")->value().c_str();
+
   BroadcastData(false, false, 0, true, false, mac);
 
   AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
@@ -186,11 +158,7 @@ void launchControlPointWeb(){
   control_point_server.onNotFound(handleNotFound);
   
   control_point_server.begin();
-  updateAPIWithIpAddress();
-  /*
-  control_point_server.on("/restart", HTTP_GET, restart);
-  control_point_server.on("/register", HTTP_GET, registerControlPoint);
-  */
+  updateAPIWithIpAddress(getApiHost(), getApiPort(), getControlPointId(), WiFi.localIP().toString());
 }
 
 void addReading(NodeReading reading){

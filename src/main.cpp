@@ -6,6 +6,7 @@
 #include "initial_server.h"
 #include "control_point_server.h"
 #include "esp_now_handler.h"
+#include "api_wrapper.h"
 
 AsyncWebServer server(80);
 
@@ -41,12 +42,19 @@ void setup() {
   
   WiFi.disconnect();
 
-  initPrefs();
+  //eraseSettings();
+  //esp_restart();
+
+  if(!initSettings()){
+    Serial.println("There was an error initializing settings");
+    esp_restart();
+  }
+
+  String ssid = getSSID();
 
   macAddress = WiFi.macAddress();
 
-  if(isSSIDEmpty()){
-    Serial.println("empty ssid");
+  if(ssid.isEmpty()){
     setupAccessPoint();
   }else{
     connectToWifi(getSSID().c_str(), getNetworkKey().c_str());
@@ -80,17 +88,32 @@ if(!hasPreferences){
   }else{
     delay(100);
 
+    int nodeIdToLog = GetNodeIdToLog();
+    if(nodeIdToLog > 0){
+      for(NodeReading r : GetNodeReadings()){
+        if(r.nodeId == nodeIdToLog){
+          delay(50);
+          logNodeReading(getApiHost(), getApiPort(), r);
+          delay(50);
+        }
+      }
+
+      ReSetNodeIdToLog();
+    } 
+
     // increment our time counter
     unsigned long currentMillis = millis();
+
     // if WiFi is down, try reconnecting
     if ((WiFi.status() != WL_CONNECTED) && (currentMillis - previousMillis >=interval)) {
       Serial.println(millis());
       Serial.println("Reconnecting to WiFi...");
       WiFi.disconnect();
       if(WiFi.reconnect()){
-        if(getControlPointId() > 0){
+        int controlPointId = getControlPointId();
+        if(controlPointId > 0){
           Serial.println("Updating API with new IP");
-          updateAPIWithIpAddress();
+          updateAPIWithIpAddress(getApiHost(), getApiPort(), controlPointId, WiFi.localIP().toString());
         }
       }
       previousMillis = currentMillis;

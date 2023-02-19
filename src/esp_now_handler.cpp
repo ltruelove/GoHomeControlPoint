@@ -1,8 +1,10 @@
 #include "esp_now_handler.h"
+#include "api_wrapper.h"
 
 NodeReading nowReading;
 esp_now_peer_info_t peerInfo;
-;
+
+int nodeIdToLog = 0;
 
 struct SwitchCommand {
     bool triggerToggle;
@@ -25,6 +27,16 @@ void OnDataRecv(const uint8_t * mac_addr, const uint8_t *incomingData, int len) 
     
     // store the reading for fetching later
     addReading(nowReading);
+    
+    nodeIdToLog = nowReading.nodeId;
+}
+
+void ReSetNodeIdToLog(){
+    nodeIdToLog = 0;
+}
+
+int GetNodeIdToLog(){
+    return nodeIdToLog;
 }
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
@@ -89,6 +101,7 @@ void BroadcastData(bool triggerToggle, bool pressMomentary, int msMomentaryPress
         addPeer(mac);
     }
 
+    Serial.println(command.triggerUpdate);
     esp_err_t result = esp_now_send(mac, (uint8_t *) &command, sizeof(command));
 
     if (result == ESP_OK) {

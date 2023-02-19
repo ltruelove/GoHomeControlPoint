@@ -14,5 +14,6 @@
 void launchControlPointWeb();
 void addReading(NodeReading reading);
 void updateAPIWithIpAddress();
+std::vector<NodeReading> GetNodeReadings();
 
 #endif

@@ -1,21 +1,24 @@
 #ifndef CONTROL_POINT_PREFS
 #define CONTROL_POINT_PREFS
 
-#include <Preferences.h>
+#include <Arduino.h>
+#include "settings.h"
 
-void initPrefs();
-bool isSSIDEmpty();
-void setPrefs(String _ssid, String _pass, String _apiHost, int _apiPort, String _name, int _controlPointId);
-void savePrefs();
 void clearPrefs();
-void setControlPointId(int _controlPointId);
+
 String getSSID();
 String getNetworkKey();
 String getApiHost();
-void setApiHost(String ipAddress);
-void setApiPort(int port);
+int getControlPointId();
 int getApiPort();
 String getName();
-int getControlPointId();
+
+void setApiHost(String ipAddress);
+void setApiPort(int port);
+void setSSID(String _ssid);
+void setPass(String _pass);
+void setApiHost(String _apiHost);
+void setName(String _name);
+void setControlPointId(int _controlPointId);
 
 #endif

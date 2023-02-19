@@ -35,9 +35,13 @@ void setParameters(AsyncWebServerRequest *request){
     }
 
     if (ssid.length() > 0 && pass.length() > 0) {
-        setPrefs(ssid, pass, apiHost, apiPort, name, 0);
+        setSSID(ssid);
+        setPass(pass);
+        setApiHost(apiHost);
+        setName(name);
+        setApiPort(apiPort);
 
-        String message = "{\"Success\":\"saved to eeprom... reset to boot into new wifi\"}";
+        String message = "{\"Success\":\"saved to flash... resetting to boot into new wifi\"}";
         request->send(200, "application/json", message);
         
         delay(100);
