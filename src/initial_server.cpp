@@ -64,6 +64,7 @@ void launchWeb(){
   initial_server.on("/wifi-setup", HTTP_GET, wifiSetupPage);
   initial_server.on("/setting", HTTP_GET, setParameters);
   initial_server.on("/clear", HTTP_GET, clearPreferences);
+  initial_server.on("/version", HTTP_GET, controlPointVersion);
   initial_server.onNotFound(handleNotFound);
 
   setOTA(&initial_server);

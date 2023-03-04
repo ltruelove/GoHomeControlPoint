@@ -38,6 +38,7 @@ void launchRegisterWeb(){
   registration_server.on("/clear", HTTP_GET, clearPreferences);
   registration_server.on("/setControlPointId", HTTP_POST, setRegisteredId);
   registration_server.on("/restart", HTTP_GET, restart);
+  registration_server.on("/version", HTTP_GET, controlPointVersion);
   registration_server.onNotFound(handleNotFound);
 
   setOTA(&registration_server);

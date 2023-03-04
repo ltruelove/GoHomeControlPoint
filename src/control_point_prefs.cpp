@@ -1,6 +1,6 @@
 #include "control_point_prefs.h"
 
-const char *SSID = "ssid", *PASS = "pass", *API_HOST = "apiHost", *NODE_NAME = "name", *CTRL_PT_ID = "controlPointId", *API_PORT = "apiPort";
+const char *SSID = "ssid", *PASS = "pass", *API_HOST = "apiHost", *NODE_NAME = "name", *CTRL_PT_ID = "controlPointId", *API_PORT = "apiPort", *VERSION = "version";
 
 void clearPrefs(){
     eraseSettings();
@@ -30,6 +30,10 @@ int getApiPort(){
     return getIntValue(API_PORT);
 }
 
+String getVersion(){
+    return getStringValue(VERSION);
+}
+
 void setApiPort(int port){
     setIntValue(port, API_PORT);
 }
@@ -52,4 +56,8 @@ void setName(String _name){
 
 void setControlPointId(int _controlPointId){
     setIntValue(_controlPointId, CTRL_PT_ID);
+}
+
+void setVersion(String _version){
+    setStringValue(_version.c_str(), VERSION);
 }

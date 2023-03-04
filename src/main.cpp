@@ -9,6 +9,7 @@
 #include "esp_now_handler.h"
 #include "api_wrapper.h"
 
+const String version = "0.1.0";
 AsyncWebServer server(80);
 
 unsigned long previousMillis = 0;
@@ -57,6 +58,7 @@ void setup() {
     esp_restart();
   }
 
+  setVersion(version);
   String ssid = getSSID();
 
   macAddress = WiFi.macAddress();

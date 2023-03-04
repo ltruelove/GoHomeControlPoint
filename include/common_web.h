@@ -12,5 +12,6 @@ String scanNetworks();
 void clearPreferences(AsyncWebServerRequest *request);
 void handleNotFound(AsyncWebServerRequest *request);
 void setOTA(AsyncWebServer *server);
+void controlPointVersion(AsyncWebServerRequest *request);
 
 #endif

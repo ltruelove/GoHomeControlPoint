@@ -12,6 +12,7 @@ String getApiHost();
 int getControlPointId();
 int getApiPort();
 String getName();
+String getVersion();
 
 void setApiHost(String ipAddress);
 void setApiPort(int port);
@@ -20,5 +21,6 @@ void setPass(String _pass);
 void setApiHost(String _apiHost);
 void setName(String _name);
 void setControlPointId(int _controlPointId);
+void setVersion(String _version);
 
 #endif

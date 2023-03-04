@@ -1,5 +1,6 @@
 #include "common_web.h"
 #include "Update.h"
+#include "SPIFFS.h"
 #include <AsyncElegantOTA.h>
 
 String processor(const String& var){
@@ -15,6 +16,10 @@ String processor(const String& var){
 
   if(var == "APIHOSTIP"){
     return getApiHost();
+  }
+
+  if(var == "VERSION"){
+    return getVersion();
   }
 
   if(var == "APIHOST"){
@@ -102,4 +107,8 @@ void handleNotFound(AsyncWebServerRequest *request) {
 
 void setOTA(AsyncWebServer *server){
   AsyncElegantOTA.begin(server);
+}
+
+void controlPointVersion(AsyncWebServerRequest *request) {
+  request->send(SPIFFS, "/controlPoint_version.html", String(), false, processor);
 }

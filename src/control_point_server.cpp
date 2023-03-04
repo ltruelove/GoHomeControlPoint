@@ -173,6 +173,7 @@ void launchControlPointWeb(){
   control_point_server.on("/triggerUpdate", HTTP_GET, triggerUpdate);
   control_point_server.on("/eraseNodeSettings", HTTP_GET, eraseNodeSettings);
   control_point_server.on("/nodeUpdateMode", HTTP_GET, putInUpdateMode);
+  control_point_server.on("/version", HTTP_GET, controlPointVersion);
   control_point_server.onNotFound(handleNotFound);
  
   setOTA(&control_point_server);
