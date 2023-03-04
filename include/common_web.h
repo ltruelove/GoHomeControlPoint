@@ -11,5 +11,6 @@ String processor(const String& var);
 String scanNetworks();
 void clearPreferences(AsyncWebServerRequest *request);
 void handleNotFound(AsyncWebServerRequest *request);
+void setOTA(AsyncWebServer *server);
 
 #endif

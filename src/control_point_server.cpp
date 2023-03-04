@@ -1,6 +1,7 @@
 #include "control_point_server.h"
 #include "esp_now_handler.h"
 #include "api_wrapper.h"
+#include "SPIFFS.h"
 
 AsyncWebServer control_point_server(80);
 //AsyncEventSource events("/events");
@@ -8,11 +9,11 @@ AsyncWebServer control_point_server(80);
 std::vector<NodeReading> readings;
 
 void controlPointHome(AsyncWebServerRequest *request) {
-    request->send_P(200, "text/html", controlPoint_index_html, processor);
+  request->send(SPIFFS, "/controlPoint_index.html", String(), false, processor);
 }
 
 void controlPointUpdateIp(AsyncWebServerRequest *request) {
-    request->send(200, "text/html", api_ip_change_form);
+  request->send(SPIFFS, "/api_ip_change_form.html");
 }
 
 std::vector<NodeReading> GetNodeReadings(){
@@ -80,7 +81,7 @@ void toggleNodeSwitch(AsyncWebServerRequest *request) {
   }
 
   mac = request->getParam("mac")->value().c_str();
-  BroadcastData(true, false, 0, false, false, mac);
+  BroadcastData(true, false, 0, false, false, false, mac);
 
   AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
   response->addHeader("Access-Control-Allow-Origin", "*");
@@ -104,7 +105,7 @@ void pressMomentary(AsyncWebServerRequest *request) {
   mac = request->getParam("mac")->value().c_str();
   duration = atoi(request->getParam("MomentaryPressDuration")->value().c_str());
 
-  BroadcastData(false, true, duration, false, false, mac);
+  BroadcastData(false, true, duration, false, false, false, mac);
 
   AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
   response->addHeader("Access-Control-Allow-Origin", "*");
@@ -121,7 +122,7 @@ void triggerUpdate(AsyncWebServerRequest *request) {
 
   mac = request->getParam("mac")->value().c_str();
 
-  BroadcastData(false, false, 0, true, false, mac);
+  BroadcastData(false, false, 0, true, false, false, mac);
 
   AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
   response->addHeader("Access-Control-Allow-Origin", "*");
@@ -137,7 +138,23 @@ void eraseNodeSettings(AsyncWebServerRequest *request) {
   }
 
   mac = request->getParam("mac")->value().c_str();
-  BroadcastData(false, false, 0, false, true, mac);
+  BroadcastData(false, false, 0, false, true, false, mac);
+
+  AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
+}
+
+void putInUpdateMode(AsyncWebServerRequest *request) {
+  String mac = "";
+
+  if(!request->hasParam("mac")){
+    request->send(400, "text/html", "node MAC address is required");
+    return;
+  }
+
+  mac = request->getParam("mac")->value().c_str();
+  BroadcastData(false, false, 0, false, false, true, mac);
 
   AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "");
   response->addHeader("Access-Control-Allow-Origin", "*");
@@ -155,9 +172,14 @@ void launchControlPointWeb(){
   control_point_server.on("/pressMomentary", HTTP_GET, pressMomentary);
   control_point_server.on("/triggerUpdate", HTTP_GET, triggerUpdate);
   control_point_server.on("/eraseNodeSettings", HTTP_GET, eraseNodeSettings);
+  control_point_server.on("/nodeUpdateMode", HTTP_GET, putInUpdateMode);
   control_point_server.onNotFound(handleNotFound);
-  
+ 
+  setOTA(&control_point_server);
+ 
+  Serial.println("begin control point server");
   control_point_server.begin();
+
   updateAPIWithIpAddress(getApiHost(), getApiPort(), getControlPointId(), WiFi.localIP().toString());
 }
 

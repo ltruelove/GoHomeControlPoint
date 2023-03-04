@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include "SPIFFS.h"
 
 #include "control_point_prefs.h"
 #include "registration_server.h"
@@ -40,6 +41,12 @@ void connectToWifi(const char *ssid, const char *key){
 void setup() {
   Serial.begin(115200);
   
+  // Initialize SPIFFS
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
+
   WiFi.disconnect();
 
   //eraseSettings();

@@ -1,13 +1,14 @@
 #include "registration_server.h"
+#include "SPIFFS.h"
 
 AsyncWebServer registration_server(80);
 
 void registerHome(AsyncWebServerRequest *request) {
-    request->send(200, "text/html", register_index_html);
+  request->send(SPIFFS, "/register_index.html");
 }
 
 void registerControlPoint(AsyncWebServerRequest *request) {
-    request->send_P(200, "text/html", register_control_point_html, processor);
+  request->send(SPIFFS, "/register_controlPoint.html", String(), false, processor);
 }
 
 void setRegisteredId(AsyncWebServerRequest *request){
@@ -38,5 +39,9 @@ void launchRegisterWeb(){
   registration_server.on("/setControlPointId", HTTP_POST, setRegisteredId);
   registration_server.on("/restart", HTTP_GET, restart);
   registration_server.onNotFound(handleNotFound);
+
+  setOTA(&registration_server);
+
+  Serial.println("begin registration server");
   registration_server.begin();
 }

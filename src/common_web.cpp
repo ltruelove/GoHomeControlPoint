@@ -1,4 +1,6 @@
 #include "common_web.h"
+#include "Update.h"
+#include <AsyncElegantOTA.h>
 
 String processor(const String& var){
 
@@ -96,4 +98,8 @@ void clearPreferences(AsyncWebServerRequest *request){
 
 void handleNotFound(AsyncWebServerRequest *request) {
   request->send(404, "text/plain", "File not found");
+}
+
+void setOTA(AsyncWebServer *server){
+  AsyncElegantOTA.begin(server);
 }

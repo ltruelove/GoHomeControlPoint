@@ -1,5 +1,6 @@
 #include "esp_now_handler.h"
 #include "api_wrapper.h"
+#include "control_point_server.h"
 
 NodeReading nowReading;
 esp_now_peer_info_t peerInfo;
@@ -12,6 +13,7 @@ struct SwitchCommand {
     int msMomentaryPress;
     bool triggerUpdate;
     bool eraseSettings;
+    bool updateMode;
 };
 
 SwitchCommand command;
@@ -91,12 +93,14 @@ uint8_t * stringToMac(String macString){
     return macArray;
 }
 
-void BroadcastData(bool triggerToggle, bool pressMomentary, int msMomentaryPress, bool triggerUpdate, bool eraseSettings, String broadcastMac){
+void BroadcastData(bool triggerToggle, bool pressMomentary, int msMomentaryPress, bool triggerUpdate, bool eraseSettings, bool updateMode, String broadcastMac){
     command.triggerToggle = triggerToggle;
     command.pressMomentary = pressMomentary;
     command.msMomentaryPress = msMomentaryPress;
     command.triggerUpdate = triggerUpdate;
     command.eraseSettings = eraseSettings;
+    command.updateMode = updateMode;
+
     uint8_t* mac = stringToMac(broadcastMac);
 
     if(!esp_now_is_peer_exist(mac)){

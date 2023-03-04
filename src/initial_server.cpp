@@ -1,13 +1,14 @@
 #include "initial_server.h"
+#include "SPIFFS.h"
 
 AsyncWebServer initial_server(80);
 
 void wifiHome(AsyncWebServerRequest *request) {
-    request->send(200, "text/html", wifi_index_html);
+  request->send(SPIFFS, "/wifi_index.html");
 }
 
 void wifiSetupPage(AsyncWebServerRequest *request){
-  request->send_P(200, "text/html", wifi_select_form, processor);
+  request->send(SPIFFS, "/wifi_select_form.html", String(), false, processor);
 }
 
 void setParameters(AsyncWebServerRequest *request){
@@ -65,6 +66,9 @@ void launchWeb(){
   initial_server.on("/clear", HTTP_GET, clearPreferences);
   initial_server.onNotFound(handleNotFound);
 
+  setOTA(&initial_server);
+
+  Serial.println("begin initial server");
   initial_server.begin();
   Serial.println("Web Server started");
 }
@@ -75,6 +79,6 @@ void setupAccessPoint(void)
   WiFi.mode(WIFI_AP);
   delay(100);
 
-  WiFi.softAP("GoHome Control Point", "");
+  WiFi.softAP("GoHome Control Point Setup", "");
   launchWeb();
 }
