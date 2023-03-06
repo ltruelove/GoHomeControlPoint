@@ -9,9 +9,10 @@
 #include "esp_now_handler.h"
 #include "api_wrapper.h"
 
-const String version = "0.1.0";
+const String version = "0.1.1";
 AsyncWebServer server(80);
 
+unsigned long restartInterval = 86400000;
 unsigned long previousMillis = 0;
 unsigned long interval = 30000;
 bool isConnected = false;
@@ -109,9 +110,14 @@ if(!hasPreferences){
 
       ReSetNodeIdToLog();
     } 
-
+    
     // increment our time counter
     unsigned long currentMillis = millis();
+
+    // restart every once in a while, currently 1 day
+    if(currentMillis  >= restartInterval){
+      ESP.restart();
+    }
 
     // if WiFi is down, try reconnecting
     if ((WiFi.status() != WL_CONNECTED) && (currentMillis - previousMillis >=interval)) {
