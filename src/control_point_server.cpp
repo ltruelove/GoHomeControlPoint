@@ -9,6 +9,7 @@ AsyncWebServer control_point_server(80);
 std::vector<NodeReading> readings;
 
 void controlPointHome(AsyncWebServerRequest *request) {
+  updateAPIWithIpAddress(getApiHost(), getApiPort(), getControlPointId(), WiFi.localIP().toString());
   request->send(SPIFFS, "/controlPoint_index.html", String(), false, processor);
 }
 
@@ -53,18 +54,14 @@ void apiIpUpdate(AsyncWebServerRequest *request) {
   }
 
   String ipAddress = request->getParam("IpAddress", true)->value();
-  int port;
-
-  if(!request->hasParam("Port", true)){
-    port = atoi(request->getParam("Port", true)->value().c_str());
-  }
+  String port = request->getParam("Port", true)->value();
 
   Serial.println(ipAddress);
 
   setApiHost(ipAddress);
   setApiPort(port);
   
-  AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "IP address saved");
+  AsyncWebServerResponse *response = request->beginResponse(200, "text/html", "IP address saved");
   response->addHeader("Access-Control-Allow-Origin", "*");
   request->send(response);
 
@@ -162,6 +159,8 @@ void putInUpdateMode(AsyncWebServerRequest *request) {
 }
 
 void launchControlPointWeb(){
+  updateAPIWithIpAddress(getApiHost(), getApiPort(), getControlPointId(), WiFi.localIP().toString());
+
   Serial.println("control point web");
   control_point_server.on("/", HTTP_GET, controlPointHome);
   control_point_server.on("/updateIp", HTTP_GET, controlPointUpdateIp);
@@ -174,14 +173,13 @@ void launchControlPointWeb(){
   control_point_server.on("/eraseNodeSettings", HTTP_GET, eraseNodeSettings);
   control_point_server.on("/nodeUpdateMode", HTTP_GET, putInUpdateMode);
   control_point_server.on("/version", HTTP_GET, controlPointVersion);
+  control_point_server.on("/restart", HTTP_GET, controlPointRestart);
   control_point_server.onNotFound(handleNotFound);
  
   setOTA(&control_point_server);
  
   Serial.println("begin control point server");
   control_point_server.begin();
-
-  updateAPIWithIpAddress(getApiHost(), getApiPort(), getControlPointId(), WiFi.localIP().toString());
 }
 
 void addReading(NodeReading reading){

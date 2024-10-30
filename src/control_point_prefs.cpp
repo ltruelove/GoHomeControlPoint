@@ -26,16 +26,16 @@ int getControlPointId(){
     return getIntValue(CTRL_PT_ID);
 }
 
-int getApiPort(){
-    return getIntValue(API_PORT);
+String getApiPort(){
+    return getStringValue(API_PORT);
 }
 
 String getVersion(){
     return getStringValue(VERSION);
 }
 
-void setApiPort(int port){
-    setIntValue(port, API_PORT);
+void setApiPort(String _port){
+    setStringValue(_port.c_str(), API_PORT);
 }
 
 void setSSID(String _ssid){

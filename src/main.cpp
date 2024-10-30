@@ -12,6 +12,8 @@
 const String version = "0.1.1";
 AsyncWebServer server(80);
 
+unsigned long ipUpdateInterval = 300000;
+unsigned long ipUpdateMillis = 0;
 unsigned long restartInterval = 86400000;
 unsigned long previousMillis = 0;
 unsigned long interval = 30000;
@@ -50,9 +52,6 @@ void setup() {
   }
 
   WiFi.disconnect();
-
-  //eraseSettings();
-  //esp_restart();
 
   if(!initSettings()){
     Serial.println("There was an error initializing settings");
@@ -117,6 +116,11 @@ if(!hasPreferences){
     // restart every once in a while, currently 1 day
     if(currentMillis  >= restartInterval){
       ESP.restart();
+    }
+
+    if(ipUpdateInterval  < currentMillis - ipUpdateMillis){
+      updateAPIWithIpAddress(getApiHost(), getApiPort(), getControlPointId(), WiFi.localIP().toString());
+      ipUpdateMillis = currentMillis;
     }
 
     // if WiFi is down, try reconnecting

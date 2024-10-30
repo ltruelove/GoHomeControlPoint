@@ -10,12 +10,12 @@ String getSSID();
 String getNetworkKey();
 String getApiHost();
 int getControlPointId();
-int getApiPort();
+String getApiPort();
 String getName();
 String getVersion();
 
 void setApiHost(String ipAddress);
-void setApiPort(int port);
+void setApiPort(String _port);
 void setSSID(String _ssid);
 void setPass(String _pass);
 void setApiHost(String _apiHost);

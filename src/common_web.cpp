@@ -18,6 +18,16 @@ String processor(const String& var){
     return getApiHost();
   }
 
+  if(var == "APIPORT"){
+    return getApiPort();
+  }
+
+  if(var == "CPID"){
+    char cpIdString;
+    sprintf(&cpIdString, "%d", getControlPointId());
+    return (String)cpIdString;
+  }
+
   if(var == "VERSION"){
     return getVersion();
   }
@@ -25,9 +35,9 @@ String processor(const String& var){
   if(var == "APIHOST"){
     String host = "http://";
     host += getApiHost();
-    uint16_t port = getApiPort();
+    String port = getApiPort();
 
-    if(port > 0 && port != 80){
+    if(port != "" && port != "80"){
       host += ":";
       host.concat(port);
     }
@@ -111,4 +121,11 @@ void setOTA(AsyncWebServer *server){
 
 void controlPointVersion(AsyncWebServerRequest *request) {
   request->send(SPIFFS, "/controlPoint_version.html", String(), false, processor);
+}
+
+void controlPointRestart(AsyncWebServerRequest *request) {
+  request->send(200, "text/html", "Restarting");
+
+  delay(100);
+  esp_restart();
 }

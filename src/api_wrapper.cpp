@@ -8,13 +8,13 @@
 #include "api_wrapper.h"
 #include "settings.h"
 
-void updateAPIWithIpAddress(String apiHost, int port, int controlPointId, String ipAddress){
+void updateAPIWithIpAddress(String apiHost, String port, int controlPointId, String ipAddress){
     WiFiClient client;
     HTTPClient http;
 
     String updateEndpoint = "http://" + apiHost;
-    if(port != 80){
-        updateEndpoint += ":" + (String)port;
+    if(port != "80"){
+        updateEndpoint += ":" + port;
     }
     updateEndpoint += "/controlPoint/ipUpdate";
 
@@ -38,13 +38,13 @@ void updateAPIWithIpAddress(String apiHost, int port, int controlPointId, String
     http.end();
 }
 
-void logNodeReading(String apiHost, int port, NodeReading reading){
+void logNodeReading(String apiHost, String port, NodeReading reading){
     WiFiClient client;
     HTTPClient http;
 
     String updateEndpoint = "http://" + apiHost;
-    if(port != 80){
-        updateEndpoint += ":" + (String)port;
+    if(port != "80"){
+        updateEndpoint += ":" + port;
     }
     updateEndpoint += "/node/reading";
 
