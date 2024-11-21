@@ -8,6 +8,7 @@
 #include "control_point_server.h"
 #include "esp_now_handler.h"
 #include "api_wrapper.h"
+#include <ESPAsyncWebServer.h>
 
 const String version = "0.1.1";
 AsyncWebServer server(80);

@@ -2,36 +2,54 @@
 
 const char *SSID = "ssid", *PASS = "pass", *API_HOST = "apiHost", *NODE_NAME = "name", *CTRL_PT_ID = "controlPointId", *API_PORT = "apiPort", *VERSION = "version";
 
+String ssid;
+String networkKey;
+String apiHost;
+String name;
+int controlPointId;
+String apiPort;
+String version;
+
+void initControlPointPrefs(){
+    ssid = getStringValue(SSID);
+    networkKey = getStringValue(PASS);
+    apiHost = getStringValue(API_HOST);
+    name = getStringValue(NODE_NAME);
+    controlPointId = getIntValue(CTRL_PT_ID);
+    apiPort = getStringValue(API_PORT);
+    version = getStringValue(VERSION);
+}
+
 void clearPrefs(){
     eraseSettings();
 }
 
 String getSSID(){
-    return getStringValue(SSID);
+    return ssid;
 }
 
 String getNetworkKey(){
-    return getStringValue(PASS);
+    return networkKey;
 }
 
 String getApiHost(){
-    return getStringValue(API_HOST);
+    return apiHost;
 }
 
 String getName(){
-    return getStringValue(NODE_NAME);
+    return name;
 }
 
 int getControlPointId(){
-    return getIntValue(CTRL_PT_ID);
+    return controlPointId;
 }
 
 String getApiPort(){
-    return getStringValue(API_PORT);
+    return apiPort;
 }
 
 String getVersion(){
-    return getStringValue(VERSION);
+    return version;
 }
 
 void setApiPort(String _port){

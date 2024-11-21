@@ -5,6 +5,7 @@
 #include "settings.h"
 
 void clearPrefs();
+void initControlPointPrefs();
 
 String getSSID();
 String getNetworkKey();
